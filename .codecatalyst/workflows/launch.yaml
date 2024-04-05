@@ -1,0 +1,44 @@
+Name: deploy
+SchemaVersion: "1.0"
+Triggers:
+  - Type: PUSH
+    Branches:
+      - main
+Compute:
+  Type: EC2
+  Fleet: Linux.x86-64.Large
+Actions:
+  deploy:
+    Identifier: aws/build@v1
+    Inputs:
+      Sources:
+        - WorkflowSource
+      Variables:
+        - Name: LAUNCH_OPTIONS_SOLUTION_ID
+          Value: "SO0134"
+        - Name: LAUNCH_OPTIONS_SOLUTION_NAME
+          Value: DevOps Monitoring Dashboard on AWS
+        - Name: LAUNCH_OPTIONS_DIST_SOLUTION_NAME
+          Value: aws-devops-monitoring-dashboard
+        - Name: LAUNCH_OPTIONS_DIST_VERSION
+        - Name: LAUNCH_OPTIONS_QuickSightSourceTemplateArn
+        - Name: LAUNCH_OPTIONS_TagsConfigCodeCommit
+        - Name: LAUNCH_OPTIONS_TagsConfigCodeBuild
+        - Name: LAUNCH_OPTIONS_TagsConfigCodePipeline
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+        ReportNamePrefix: rpt
+    Configuration:
+      Steps:
+        - Run: npm install
+        # - Run: npm run set-env-variable
+        - Run: npx cdk bootstrap
+        - Run: npx cdk synth
+        - Run: npm run install-dependencies
+        - Run: npx cdk --app cdk.out deploy aws-devops-monitoring-dashboard --require-approval never --parameters TagsConfigCodeCommit="env,prod" --parameters TagsConfigCodeBuild="env,prod" --parameters TagsConfigCodePipeline="env,prod"
+      Container:
+        Registry: CODECATALYST
+        Image: CodeCatalystLinux_x86_64:2024_03
+    Environment:
+      Name: dev_environment

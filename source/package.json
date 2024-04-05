@@ -1,7 +1,7 @@
 {
     "name": "aws_devops_monitoring_dashboard",
     "description": "CDK app to provision AWS resources for the solution",
-    "version": "1.8.6",
+    "version": "1.8.8",
     "bin": {
         "aws_devops_monitoring_dashboard": "bin/aws_devops_monitoring_dashboard.js"
     },
@@ -20,7 +20,9 @@
         "clean:install": "npm run clean && npm install",
         "lint": "eslint ./",
         "lint:fix": "eslint ./ --fix",
-        "clean:lint": "npm run clean:install && npm run lint"
+        "clean:lint": "npm run clean:install && npm run lint",
+        "set-env-variable": "chmod +x ../deployment/template_env.sh && source ../deployment/template_env.sh",
+        "install-dependencies": "chmod +x ../deployment/install_dependencies.sh && ../deployment/install_dependencies.sh"
     },
     "devDependencies": {
         "@aws-cdk/assert": "^2.68.0",
