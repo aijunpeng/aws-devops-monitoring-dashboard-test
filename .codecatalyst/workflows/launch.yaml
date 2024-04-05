@@ -31,6 +31,7 @@ Actions:
         ReportNamePrefix: rpt
     Configuration:
       Steps:
+        - Run: cd source
         - Run: npm install
         # - Run: npm run set-env-variable
         - Run: npx cdk bootstrap
