@@ -5,6 +5,7 @@ export SOLUTION_NAME="DevOps Monitoring Dashboard on AWS"
 export DIST_SOLUTION_NAME="aws-devops-monitoring-dashboard"
 export DIST_VERSION=$LAUNCH_OPTIONS_DIST_VERSION
 echo "SOLUTION_ID: $SOLUTION_ID"
+echo "SOLUTION_NAME: $SOLUTION_NAME"
 echo "DIST_VERSION: $DIST_VERSION"
 echo "DIST_SOLUTION_NAME: $DIST_SOLUTION_NAME"
 echo "LAUNCH_OPTIONS_QuickSightPrincipalArn: $LAUNCH_OPTIONS_QuickSightPrincipalArn"

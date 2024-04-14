@@ -3414,7 +3414,7 @@ exports[`Snapshot test for primary devopsDashboardStack 1`] = `
               {
                 "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
               },
-              "/dd6f43caad1660bed2025c92b481ba2ba4ab18ba6de1d391174fc60cacfef1fe.json",
+              "/b4447d4b3f2d66f6c3345812c1e8b09fb7e593f28f7d9755dc9b08455082c25f.json",
             ],
           ],
         },

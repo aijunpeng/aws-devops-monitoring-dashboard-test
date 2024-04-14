@@ -7,8 +7,9 @@ Triggers:
 Compute:
   Type: EC2
   Fleet: Linux.x86-64.Large
+  # SharedInstance: true
 Actions:
-  deploy-hub:
+  build-assets:
     Identifier: aws/build@v1
     Inputs:
       Sources:
@@ -46,6 +47,10 @@ Actions:
       AutoDiscoverReports:
         Enabled: false
         ReportNamePrefix: rpt
+      Artifacts:
+        - Name: source-assets
+          Files:
+            - "**/*"
     Configuration:
       Steps:
         - Run: cd source
@@ -55,8 +60,81 @@ Actions:
         - Run: npm run build
         - Run: npx cdk synth --context quicksight_source_template_arn=$LAUNCH_OPTIONS_QuickSightSourceTemplateArn
         - Run: npm run install-dependencies
-        - Run: |
-            echo $LAUNCH_OPTIONS_PrincipalType && npx cdk --app cdk.out deploy aws-devops-monitoring-dashboard --require-approval never \
+        - Run: pwd && ls -la
+        # - Run: 
+        #     npx cdk --app cdk.out deploy aws-devops-monitoring-dashboard --require-approval never \
+        #     --parameters QuickSightPrincipalArn=$LAUNCH_OPTIONS_QuickSightPrincipalArn \
+        #     --parameters UseGitHub=$LAUNCH_OPTIONS_UseGitHub \
+        #     --parameters WebhookSecretToken=$LAUNCH_OPTIONS_WebhookSecretToken \
+        #     --parameters AllowedIPs=$LAUNCH_OPTIONS_AllowedIPs \
+        #     --parameters CodeCommitRepo=$LAUNCH_OPTIONS_CodeCommitRepo \
+        #     --parameters DataDuration=$LAUNCH_OPTIONS_DataDuration \
+        #     --parameters PrincipalType="$LAUNCH_OPTIONS_PrincipalType" \
+        #     --parameters PrincipalList=$LAUNCH_OPTIONS_PrincipalList \
+        #     --parameters S3TransitionDays=$LAUNCH_OPTIONS_S3TransitionDays \
+        #     --parameters TagsConfigCodeCommit=$LAUNCH_OPTIONS_TagsConfigCodeCommit \
+        #     --parameters TagsConfigCodeBuild=$LAUNCH_OPTIONS_TagsConfigCodeBuild \
+        #     --parameters TagsConfigCodePipeline=$LAUNCH_OPTIONS_TagsConfigCodePipeline \
+      Container:
+        Registry: CODECATALYST
+        Image: CodeCatalystLinux_x86_64:2024_03
+    Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-aijunsolutions
+          Name: "960435647188"
+      Name: dev_environment
+    Timeout: 20
+  deploy-hub:
+    DependsOn:
+      - build-assets
+    Identifier: aws/build@v1
+    Inputs:
+      Artifacts:
+        - source-assets
+      Variables:
+        - Name: LAUNCH_OPTIONS_DIST_VERSION
+          Value: v1.8.8
+        - Name: LAUNCH_OPTIONS_QuickSightSourceTemplateArn
+          Value: arn:aws:quicksight:us-east-1:423991167869:template/solutions_aws-devops-monitoring-dashboard_v1_8_8
+        - Name: LAUNCH_OPTIONS_QuickSightPrincipalArn
+          Value: arn:aws:quicksight:us-east-1:960435647188:user/default/bluebeard6-admin/penaijun-Isengard
+        - Name: LAUNCH_OPTIONS_UseGitHub
+          Value: "Yes"
+        - Name: LAUNCH_OPTIONS_WebhookSecretToken
+          Value: "test_token"
+        - Name: LAUNCH_OPTIONS_AllowedIPs
+          Value: "192.30.252.0/22,185.199.108.0/22,140.82.112.0/20,143.55.64.0/20"
+        - Name: LAUNCH_OPTIONS_CodeCommitRepo
+          Value: "'ALL'"
+        - Name: LAUNCH_OPTIONS_DataDuration
+          Value: 90
+        - Name: LAUNCH_OPTIONS_PrincipalType
+          Value: "AWS Account Number"
+        - Name: LAUNCH_OPTIONS_PrincipalList
+          Value: "030552015774"
+        - Name: LAUNCH_OPTIONS_S3TransitionDays
+          Value: 365
+        - Name: LAUNCH_OPTIONS_TagsConfigCodeCommit
+          Value: "env,prod"
+        - Name: LAUNCH_OPTIONS_TagsConfigCodeBuild
+          Value: "env,prod"
+        - Name: LAUNCH_OPTIONS_TagsConfigCodePipeline
+          Value: "env,staging"
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+        ReportNamePrefix: rpt
+    Configuration:
+      Steps:
+        - Run: cd source
+        # - Run: npm install
+        # - Run: chmod +x ../.codecatalyst/workflows/set_solution_env.sh && source ../.codecatalyst/workflows/set_solution_env.sh
+        # - Run: npx cdk bootstrap
+        # - Run: npm run build
+        # - Run: npx cdk synth --context quicksight_source_template_arn=$LAUNCH_OPTIONS_QuickSightSourceTemplateArn
+        # - Run: npm run install-dependencies
+        - Run: 
+            npx cdk --app cdk.out deploy aws-devops-monitoring-dashboard --require-approval never \
             --parameters QuickSightPrincipalArn=$LAUNCH_OPTIONS_QuickSightPrincipalArn \
             --parameters UseGitHub=$LAUNCH_OPTIONS_UseGitHub \
             --parameters WebhookSecretToken=$LAUNCH_OPTIONS_WebhookSecretToken \
@@ -77,4 +155,166 @@ Actions:
         - Role: CodeCatalystWorkflowDevelopmentRole-aijunsolutions
           Name: "960435647188"
       Name: dev_environment
+    Timeout: 20
+  deploy-spoke:
+    DependsOn:
+      - deploy-hub
+    Identifier: aws/build@v1
+    Inputs:
+      Artifacts:
+        - source-assets
+      Variables:
+        - Name: LAUNCH_OPTIONS_DIST_VERSION
+          Value: v1.8.8
+        - Name: LAUNCH_OPTIONS_MonitorAcctCustomEventBusARN
+          Value: arn:aws:events:us-west-2:960435647188:event-bus/DevOpsCustomEventBus-f09f8547-65d7-463f-9a02-d4d43679d13c
+        - Name: LAUNCH_OPTIONS_MonitorAcctMetricsBucketARN
+          Value: arn:aws:s3:::aws-devops-metrics-f09f8547-65d7-463f-9a02-d4d43679d13c
+        - Name: LAUNCH_OPTIONS_MonitorAcctNumber
+          Value: 960435647188
+        - Name: LAUNCH_OPTIONS_MonitorAcctRegion
+          Value: "us-west-2"
+        - Name: LAUNCH_OPTIONS_SolutionUUID
+          Value: "f09f8547-65d7-463f-9a02-d4d43679d13c"
+        - Name: LAUNCH_OPTIONS_TagsConfigCodeCommit
+          Value: env,test
+        - Name: LAUNCH_OPTIONS_TagsConfigCodeBuild
+          Value: env,test
+        - Name: LAUNCH_OPTIONS_TagsConfigCodePipeline
+          Value: env,dev
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+        ReportNamePrefix: rpt
+    Configuration:
+      Steps:
+        - Run: pwd & cd source && ls -la
+        - Run: chmod +x ../.codecatalyst/workflows/set_solution_env.sh && source ../.codecatalyst/workflows/set_solution_env.sh
+        - Run: npx cdk bootstrap
+        - Run: | 
+            npx cdk --app cdk.out deploy sharing-account-stack --require-approval never \
+            --parameters MonitorAcctCustomEventBusARN=$LAUNCH_OPTIONS_MonitorAcctCustomEventBusARN \
+            --parameters MonitorAcctMetricsBucketARN=$LAUNCH_OPTIONS_MonitorAcctMetricsBucketARN \
+            --parameters MonitorAcctNumber=$LAUNCH_OPTIONS_MonitorAcctNumber \
+            --parameters MonitorAcctRegion=$LAUNCH_OPTIONS_MonitorAcctRegion \
+            --parameters SolutionUUID=$LAUNCH_OPTIONS_SolutionUUID \
+            --parameters TagsConfigCodeCommit=$LAUNCH_OPTIONS_TagsConfigCodeCommit \
+            --parameters TagsConfigCodeBuild=$LAUNCH_OPTIONS_TagsConfigCodeBuild \
+            --parameters TagsConfigCodePipeline=$LAUNCH_OPTIONS_TagsConfigCodePipeline \
+      Container:
+        Registry: CODECATALYST
+        Image: CodeCatalystLinux_x86_64:2024_03
+    Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-aijunsolutions
+          Name: "spoke-account-bb2"
+      Name: spoke-environment
+    Timeout: 20
+  deploy-pipeline-alarm:
+    # DependsOn:
+    #   - deploy-spoke
+    Identifier: aws/build@v1
+    Inputs:
+      Artifacts:
+        - source-assets
+      Variables:
+        - Name: LAUNCH_OPTIONS_DIST_VERSION
+          Value: v1.8.8
+        - Name: LAUNCH_OPTIONS_CodePipelineName
+          Value: MyFirstPipeline
+        - Name: LAUNCH_OPTIONS_CreateLogGroup
+          Value: "YES"
+        - Name: LAUNCH_OPTIONS_LogGroupName
+          Value: my-codepipeline-log-group-3
+        - Name: LAUNCH_OPTIONS_RepoName
+          Value: MyDemoRepo
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+        ReportNamePrefix: rpt
+    Configuration:
+      Steps:
+        - Run: pwd & cd source && ls -la
+        - Run: chmod +x ../.codecatalyst/workflows/set_solution_env.sh && source ../.codecatalyst/workflows/set_solution_env.sh
+        - Run: npx cdk bootstrap
+        - Run: | 
+            npx cdk --app cdk.out deploy pipeline-alarm --require-approval never \
+            --parameters CodePipelineName=$LAUNCH_OPTIONS_CodePipelineName \
+            --parameters CreateLogGroup=$LAUNCH_OPTIONS_CreateLogGroup \
+            --parameters LogGroupName=$LAUNCH_OPTIONS_LogGroupName \
+            --parameters RepoName=$LAUNCH_OPTIONS_RepoName
+      Container:
+        Registry: CODECATALYST
+        Image: CodeCatalystLinux_x86_64:2024_03
+    Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-aijunsolutions
+          Name: "spoke-account-bb2"
+      Name: spoke-environment
+    Timeout: 20
+  deploy-canary-alarm:
+    # DependsOn:
+    #   - deploy-pipeline-alarm
+    Identifier: aws/build@v1
+    Inputs:
+      Artifacts:
+        - source-assets
+      Variables:
+        - Name: LAUNCH_OPTIONS_DIST_VERSION
+          Value: v1.8.8
+        - Name: LAUNCH_OPTIONS_CanaryName
+          Value: mycanary
+        - Name: LAUNCH_OPTIONS_CreateCanary
+          Value: "Yes"
+        - Name: LAUNCH_OPTIONS_URL
+          Value: "https://www.amazon.com"
+        - Name: LAUNCH_OPTIONS_Interval
+          Value: 5
+        - Name: LAUNCH_OPTIONS_ResponseThreshold
+          Value: 15000
+        - Name: LAUNCH_OPTIONS_CreateBucket
+          Value: "Yes"
+        - Name: LAUNCH_OPTIONS_BucketName
+          Value: cw-syn-results-030552015774-us-west-2
+        - Name: LAUNCH_OPTIONS_AppName
+          Value: MyDemoApplication
+        - Name: LAUNCH_OPTIONS_RepoName
+          Value: MyDemoRepo
+        - Name: LAUNCH_OPTIONS_PercentThreshold
+          Value: 100
+        - Name: LAUNCH_OPTIONS_EvalPeriods
+          Value: 1
+        - Name: LAUNCH_OPTIONS_AlarmPeriods
+          Value: 1
+    Outputs:
+      AutoDiscoverReports:
+        Enabled: false
+        ReportNamePrefix: rpt
+    Configuration:
+      Steps:
+        - Run: pwd & cd source && ls -la
+        - Run: chmod +x ../.codecatalyst/workflows/set_solution_env.sh && source ../.codecatalyst/workflows/set_solution_env.sh
+        - Run: npx cdk bootstrap
+        - Run: | 
+            npx cdk --app cdk.out deploy canary-alarm --require-approval never \
+            --parameters CanaryName=$LAUNCH_OPTIONS_CanaryName \
+            --parameters CreateCanary=$LAUNCH_OPTIONS_CreateCanary \
+            --parameters URL=$LAUNCH_OPTIONS_URL \
+            --parameters Interval=$LAUNCH_OPTIONS_Interval \
+            --parameters ResponseThreshold=$LAUNCH_OPTIONS_ResponseThreshold \
+            --parameters CreateBucket=$LAUNCH_OPTIONS_CreateBucket \
+            --parameters BucketName=$LAUNCH_OPTIONS_BucketName \
+            --parameters AppName=$LAUNCH_OPTIONS_AppName \
+            --parameters RepoName=$LAUNCH_OPTIONS_RepoName \
+            --parameters PercentThreshold=$LAUNCH_OPTIONS_PercentThreshold \
+            --parameters EvalPeriods=$LAUNCH_OPTIONS_EvalPeriods \
+            --parameters AlarmPeriods=$LAUNCH_OPTIONS_AlarmPeriods
+      Container:
+        Registry: CODECATALYST
+        Image: CodeCatalystLinux_x86_64:2024_03
+    Environment:
+      Connections:
+        - Role: CodeCatalystWorkflowDevelopmentRole-aijunsolutions
+          Name: "spoke-account-bb2"
+      Name: spoke-environment
     Timeout: 20
