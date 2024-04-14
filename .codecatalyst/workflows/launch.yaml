@@ -211,8 +211,8 @@ Actions:
       Name: spoke-environment
     Timeout: 20
   deploy-pipeline-alarm:
-    # DependsOn:
-    #   - deploy-spoke
+    DependsOn:
+      - build-assets
     Identifier: aws/build@v1
     Inputs:
       Artifacts:
@@ -253,8 +253,8 @@ Actions:
       Name: spoke-environment
     Timeout: 20
   deploy-canary-alarm:
-    # DependsOn:
-    #   - deploy-pipeline-alarm
+    DependsOn:
+      - build-assets
     Identifier: aws/build@v1
     Inputs:
       Artifacts:
