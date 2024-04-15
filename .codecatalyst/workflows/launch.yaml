@@ -16,35 +16,21 @@ Actions:
         - WorkflowSource
       Variables:
         - Name: LAUNCH_OPTIONS_Region
-          Value: eu-west-1
         - Name: LAUNCH_OPTIONS_DIST_VERSION
-          Value: v1.8.8
         - Name: LAUNCH_OPTIONS_QuickSightSourceTemplateArn
-          Value: arn:aws:quicksight:us-east-1:423991167869:template/solutions_aws-devops-monitoring-dashboard_v1_8_8
-        - Name: LAUNCH_OPTIONS_QuickSightPrincipalArn
-          Value: arn:aws:quicksight:us-east-1:960435647188:user/default/bluebeard6-admin/penaijun-Isengard
-        - Name: LAUNCH_OPTIONS_UseGitHub
-          Value: "Yes"
-        - Name: LAUNCH_OPTIONS_WebhookSecretToken
-          Value: "test_token"
-        - Name: LAUNCH_OPTIONS_AllowedIPs
-          Value: "192.30.252.0/22,185.199.108.0/22,140.82.112.0/20,143.55.64.0/20"
-        - Name: LAUNCH_OPTIONS_CodeCommitRepo
-          Value: "'ALL'"
-        - Name: LAUNCH_OPTIONS_DataDuration
-          Value: 90
-        - Name: LAUNCH_OPTIONS_PrincipalType
-          Value: "AWS Account Number"
-        - Name: LAUNCH_OPTIONS_PrincipalList
-          Value: "030552015774"
-        - Name: LAUNCH_OPTIONS_S3TransitionDays
-          Value: 365
-        - Name: LAUNCH_OPTIONS_TagsConfigCodeCommit
-          Value: "env,prod"
-        - Name: LAUNCH_OPTIONS_TagsConfigCodeBuild
-          Value: "env,prod"
-        - Name: LAUNCH_OPTIONS_TagsConfigCodePipeline
-          Value: "env,staging"
+          # Value: arn:aws:quicksight:us-east-1:423991167869:template/solutions_aws-devops-monitoring-dashboard_v1_8_8
+        # - Name: LAUNCH_OPTIONS_QuickSightPrincipalArn
+        # - Name: LAUNCH_OPTIONS_UseGitHub
+        # - Name: LAUNCH_OPTIONS_WebhookSecretToken
+        # - Name: LAUNCH_OPTIONS_AllowedIPs
+        # - Name: LAUNCH_OPTIONS_CodeCommitRepo
+        # - Name: LAUNCH_OPTIONS_DataDuration
+        # - Name: LAUNCH_OPTIONS_PrincipalType
+        # - Name: LAUNCH_OPTIONS_PrincipalList
+        # - Name: LAUNCH_OPTIONS_S3TransitionDays
+        # - Name: LAUNCH_OPTIONS_TagsConfigCodeCommit
+        # - Name: LAUNCH_OPTIONS_TagsConfigCodeBuild
+        # - Name: LAUNCH_OPTIONS_TagsConfigCodePipeline
     Outputs:
       AutoDiscoverReports:
         Enabled: false
@@ -94,34 +80,32 @@ Actions:
       Artifacts:
         - source-assets
       Variables:
-        - Name: LAUNCH_OPTIONS_DIST_VERSION
-          Value: v1.8.8
-        - Name: LAUNCH_OPTIONS_QuickSightSourceTemplateArn
-          Value: arn:aws:quicksight:us-east-1:423991167869:template/solutions_aws-devops-monitoring-dashboard_v1_8_8
+        # - Name: LAUNCH_OPTIONS_DIST_VERSION
+        # - Name: LAUNCH_OPTIONS_QuickSightSourceTemplateArn
+        #   Value: arn:aws:quicksight:us-east-1:423991167869:template/solutions_aws-devops-monitoring-dashboard_v1_8_8
         - Name: LAUNCH_OPTIONS_QuickSightPrincipalArn
-          Value: arn:aws:quicksight:us-east-1:960435647188:user/default/bluebeard6-admin/penaijun-Isengard
         - Name: LAUNCH_OPTIONS_UseGitHub
-          Value: "Yes"
+          # Value: "Yes"
         - Name: LAUNCH_OPTIONS_WebhookSecretToken
-          Value: "test_token"
+          # Value: "test_token"
         - Name: LAUNCH_OPTIONS_AllowedIPs
-          Value: "192.30.252.0/22,185.199.108.0/22,140.82.112.0/20,143.55.64.0/20"
+          # Value: "192.30.252.0/22,185.199.108.0/22,140.82.112.0/20,143.55.64.0/20"
         - Name: LAUNCH_OPTIONS_CodeCommitRepo
-          Value: "'ALL'"
+          # Value: "'ALL'"
         - Name: LAUNCH_OPTIONS_DataDuration
-          Value: 90
+          # Value: 90
         - Name: LAUNCH_OPTIONS_PrincipalType
-          Value: "AWS Account Number"
+          # Value: "AWS Account Number"
         - Name: LAUNCH_OPTIONS_PrincipalList
-          Value: "030552015774"
+          # Value: "030552015774"
         - Name: LAUNCH_OPTIONS_S3TransitionDays
-          Value: 365
+          # Value: 365
         - Name: LAUNCH_OPTIONS_TagsConfigCodeCommit
-          Value: "env,prod"
+          # Value: "env,prod"
         - Name: LAUNCH_OPTIONS_TagsConfigCodeBuild
-          Value: "env,prod"
+          # Value: "env,prod"
         - Name: LAUNCH_OPTIONS_TagsConfigCodePipeline
-          Value: "env,staging"
+        #   Value: "env,staging"
     Outputs:
       AutoDiscoverReports:
         Enabled: false
