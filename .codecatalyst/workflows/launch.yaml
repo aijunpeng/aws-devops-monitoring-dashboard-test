@@ -36,7 +36,7 @@ Actions:
         Enabled: false
         ReportNamePrefix: rpt
       Artifacts:
-        - Name: source-assets
+        - Name: SourceAssets
           Files:
             - "**/*"
     Configuration:
@@ -78,7 +78,7 @@ Actions:
     Identifier: aws/build@v1
     Inputs:
       Artifacts:
-        - source-assets
+        - SourceAssets
       Variables:
         # - Name: LAUNCH_OPTIONS_DIST_VERSION
         # - Name: LAUNCH_OPTIONS_QuickSightSourceTemplateArn
@@ -148,7 +148,7 @@ Actions:
     Identifier: aws/build@v1
     Inputs:
       Artifacts:
-        - source-assets
+        - SourceAssets
       Variables:
         - Name: LAUNCH_OPTIONS_Region
           Value: eu-west-1
@@ -159,7 +159,7 @@ Actions:
         - Name: LAUNCH_OPTIONS_MonitorAcctMetricsBucketARN
           Value: arn:aws:s3:::aws-devops-metrics-f09f8547-65d7-463f-9a02-d4d43679d13c
         - Name: LAUNCH_OPTIONS_MonitorAcctNumber
-          Value: 960435647188
+          Value: "960435647188"
         - Name: LAUNCH_OPTIONS_MonitorAcctRegion
           # Value: "us-west-2"
           Value: "eu-west-1"
@@ -205,7 +205,7 @@ Actions:
     Identifier: aws/build@v1
     Inputs:
       Artifacts:
-        - source-assets
+        - SourceAssets
       Variables:
         - Name: LAUNCH_OPTIONS_Region
           Value: eu-west-1
@@ -249,7 +249,7 @@ Actions:
     Identifier: aws/build@v1
     Inputs:
       Artifacts:
-        - source-assets
+        - SourceAssets
       Variables:
         - Name: LAUNCH_OPTIONS_Region
           Value: eu-west-1
@@ -262,24 +262,24 @@ Actions:
         - Name: LAUNCH_OPTIONS_URL
           Value: "https://www.amazon.com"
         - Name: LAUNCH_OPTIONS_Interval
-          Value: 5
+          Value: "5"
         - Name: LAUNCH_OPTIONS_ResponseThreshold
-          Value: 15000
+          Value: "15000"
         - Name: LAUNCH_OPTIONS_CreateBucket
           Value: "Yes"
         - Name: LAUNCH_OPTIONS_BucketName
-          # Value: cw-syn-results-030552015774-us-west-2
-          Value: cw-syn-results-$ACCOUNT_ID-eu-west-1
+          Value: cw-syn-results-030552015774-eu-west-1
+          # Value: cw-syn-results-$ACCOUNT_ID-eu-west-1
         - Name: LAUNCH_OPTIONS_AppName
           Value: MyDemoApplication
         - Name: LAUNCH_OPTIONS_RepoName
           Value: MyDemoRepo
         - Name: LAUNCH_OPTIONS_PercentThreshold
-          Value: 100
+          Value: "100"
         - Name: LAUNCH_OPTIONS_EvalPeriods
-          Value: 1
+          Value: "1"
         - Name: LAUNCH_OPTIONS_AlarmPeriods
-          Value: 1
+          Value: "1"
     Outputs:
       AutoDiscoverReports:
         Enabled: false
