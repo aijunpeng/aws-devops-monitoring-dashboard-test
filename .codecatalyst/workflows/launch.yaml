@@ -15,6 +15,8 @@ Actions:
       Sources:
         - WorkflowSource
       Variables:
+        - Name: LAUNCH_OPTIONS_Region
+          Value: eu-west-1
         - Name: LAUNCH_OPTIONS_DIST_VERSION
           Value: v1.8.8
         - Name: LAUNCH_OPTIONS_QuickSightSourceTemplateArn
@@ -56,7 +58,7 @@ Actions:
         - Run: cd source
         - Run: npm install
         - Run: chmod +x ../.codecatalyst/bin/set_solution_env.sh && source ../.codecatalyst/bin/set_solution_env.sh
-        - Run: npx cdk bootstrap aws://960435647188/eu-west-1
+        - Run: npx cdk bootstrap aws://$ACCOUNT_ID/$LAUNCH_OPTIONS_Region
         - Run: npm run build
         - Run: npx cdk synth --context quicksight_source_template_arn=$LAUNCH_OPTIONS_QuickSightSourceTemplateArn
         - Run: npm run install-dependencies
@@ -164,6 +166,8 @@ Actions:
       Artifacts:
         - source-assets
       Variables:
+        - Name: LAUNCH_OPTIONS_Region
+          Value: eu-west-1
         - Name: LAUNCH_OPTIONS_DIST_VERSION
           Value: v1.8.8
         - Name: LAUNCH_OPTIONS_MonitorAcctCustomEventBusARN
@@ -191,7 +195,7 @@ Actions:
       Steps:
         - Run: pwd & cd source && ls -la
         - Run: chmod +x ../.codecatalyst/bin/set_solution_env.sh && source ../.codecatalyst/bin/set_solution_env.sh
-        - Run: npx cdk bootstrap aws://030552015774/eu-west-1
+        - Run: npx cdk bootstrap aws://$ACCOUNT_ID/$LAUNCH_OPTIONS_Region
         - Run: | 
             npx cdk --app cdk.out deploy sharing-account-stack --require-approval never \
             --parameters MonitorAcctCustomEventBusARN=$LAUNCH_OPTIONS_MonitorAcctCustomEventBusARN \
@@ -219,6 +223,8 @@ Actions:
       Artifacts:
         - source-assets
       Variables:
+        - Name: LAUNCH_OPTIONS_Region
+          Value: eu-west-1
         - Name: LAUNCH_OPTIONS_DIST_VERSION
           Value: v1.8.8
         - Name: LAUNCH_OPTIONS_CodePipelineName
@@ -237,7 +243,7 @@ Actions:
       Steps:
         - Run: pwd & cd source && ls -la
         - Run: chmod +x ../.codecatalyst/bin/set_solution_env.sh && source ../.codecatalyst/bin/set_solution_env.sh
-        - Run: npx cdk bootstrap aws://030552015774/eu-west-1
+        - Run: npx cdk bootstrap aws://$ACCOUNT_ID/$LAUNCH_OPTIONS_Region
         - Run: | 
             npx cdk --app cdk.out deploy pipeline-alarm --require-approval never \
             --parameters CodePipelineName=$LAUNCH_OPTIONS_CodePipelineName \
@@ -261,6 +267,8 @@ Actions:
       Artifacts:
         - source-assets
       Variables:
+        - Name: LAUNCH_OPTIONS_Region
+          Value: eu-west-1
         - Name: LAUNCH_OPTIONS_DIST_VERSION
           Value: v1.8.8
         - Name: LAUNCH_OPTIONS_CanaryName
@@ -277,7 +285,7 @@ Actions:
           Value: "Yes"
         - Name: LAUNCH_OPTIONS_BucketName
           # Value: cw-syn-results-030552015774-us-west-2
-          Value: cw-syn-results-030552015774-eu-west-1
+          Value: cw-syn-results-$ACCOUNT_ID-eu-west-1
         - Name: LAUNCH_OPTIONS_AppName
           Value: MyDemoApplication
         - Name: LAUNCH_OPTIONS_RepoName
@@ -296,7 +304,7 @@ Actions:
       Steps:
         - Run: pwd & cd source && ls -la
         - Run: chmod +x ../.codecatalyst/bin/set_solution_env.sh && source ../.codecatalyst/bin/set_solution_env.sh
-        - Run: npx cdk bootstrap aws://030552015774/eu-west-1
+        - Run: npx cdk bootstrap aws://$ACCOUNT_ID/$LAUNCH_OPTIONS_Region
         - Run: | 
             npx cdk --app cdk.out deploy canary-alarm --require-approval never \
             --parameters CanaryName=$LAUNCH_OPTIONS_CanaryName \

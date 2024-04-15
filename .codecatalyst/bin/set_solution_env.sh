@@ -4,10 +4,13 @@ export SOLUTION_ID="SO0134"
 export SOLUTION_NAME="DevOps Monitoring Dashboard on AWS"
 export DIST_SOLUTION_NAME="aws-devops-monitoring-dashboard"
 export DIST_VERSION=$LAUNCH_OPTIONS_DIST_VERSION
+export ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 echo "SOLUTION_ID: $SOLUTION_ID"
 echo "SOLUTION_NAME: $SOLUTION_NAME"
 echo "DIST_VERSION: $DIST_VERSION"
 echo "DIST_SOLUTION_NAME: $DIST_SOLUTION_NAME"
+echo "ACCOUNT_ID: $ACCOUNT_ID"
+echo "Region: $LAUNCH_OPTIONS_Region"
 echo "LAUNCH_OPTIONS_QuickSightPrincipalArn: $LAUNCH_OPTIONS_QuickSightPrincipalArn"
 echo "LAUNCH_OPTIONS_QuickSightSourceTemplateArn: $LAUNCH_OPTIONS_QuickSightSourceTemplateArn"
 echo "LAUNCH_OPTIONS_UseGitHub: $LAUNCH_OPTIONS_UseGitHub"
