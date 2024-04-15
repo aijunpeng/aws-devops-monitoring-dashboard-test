@@ -21,7 +21,7 @@
         "lint": "eslint ./",
         "lint:fix": "eslint ./ --fix",
         "clean:lint": "npm run clean:install && npm run lint",
-        "install-dependencies": "chmod +x ../.codecatalyst/workflows/install_dependencies.sh && ../.codecatalyst/workflows/install_dependencies.sh"
+        "install-dependencies": "chmod +x ../.codecatalyst/bin/install_dependencies.sh && ../.codecatalyst/bin/install_dependencies.sh"
     },
     "devDependencies": {
         "@aws-cdk/assert": "^2.68.0",
