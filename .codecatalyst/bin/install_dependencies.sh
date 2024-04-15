@@ -19,8 +19,7 @@ echo "--------------------------------------------------------------------------
 echo "[Init] Install dependencies for Lambda functions"
 echo "------------------------------------------------------------------------------"
 cd $cdk_out_dirc
-echo "aijun directory"
-echo $PWD
+echo "Current location: $PWD"
 for folder in asset.* ; do
     cd "$folder"
 
